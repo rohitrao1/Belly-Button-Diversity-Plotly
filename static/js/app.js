@@ -1,33 +1,23 @@
 function buildMetadata(sample) {
   var url = `/metadata/${sample}`;
+  
+  // Use `d3.json` to fetch the metadata for a sample
   d3.json(url).then(function(response) {
     // clearing any existing metadata
     d3.select("#sample-metadata").html("");
+    // Use `Object.entries` to add each key and value pair to the panel
     Object.entries(response).forEach(([key, value]) => {
+      // Use d3 to select the panel with id of `#sample-metadata`
       d3.select("#sample-metadata").append("p").text(`${key}: ${value}`);
     });
-    // console.log(response.size);
-    // for (var i = 0; i < response.size; i++) {
-      // d3.select("#sample-metadata").append("p").text("hi"); 
-      // d3.select("#sample-metadata").append("p").text(Object.entries(response)[i]); 
-    // }
   });
-  // @TODO: Complete the following function that builds the metadata panel
-
-  // Use `d3.json` to fetch the metadata for a sample
-    // Use d3 to select the panel with id of `#sample-metadata`
-
-    // Use `.html("") to clear any existing metadata
-
-    // Use `Object.entries` to add each key and value pair to the panel
-    // Hint: Inside the loop, you will need to use d3 to append new
-    // tags for each key-value in the metadata.
-
 }; 
 
 function buildCharts(sample) {
   var url = `/samples/${sample}`;
+  // Use `d3.json` to fetch the sample data for the plots
   d3.json(url).then(function(response) {
+    // use slice() to grab the top 10 sample_values, otu_ids, and labels (10 each).
     var otu_ids = response["otu_ids"]; 
     var sample_otu_ids = otu_ids.slice(0, 10);
     var values = response["sample_values"];
@@ -66,18 +56,12 @@ function buildCharts(sample) {
       width: 750
     };
 
+    // Build a Pie Chart
     Plotly.newPlot("pie", data1, layout1);
+    // Build a Bubble Chart using the sample data
     Plotly.newPlot("bubble", data2, layout2);
   });
 }; 
-
-  // @TODO: Use `d3.json` to fetch the sample data for the plots
-
-    // @TODO: Build a Bubble Chart using the sample data
-
-    // @TODO: Build a Pie Chart
-    // HINT: You will need to use slice() to grab the top 10 sample_values,
-    // otu_ids, and labels (10 each).
 
 function init() {
   // Grab a reference to the dropdown select element
